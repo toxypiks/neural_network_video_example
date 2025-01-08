@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <assert.h>
 #include <string.h>
 #include <errno.h>
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 int main (void)
@@ -13,11 +15,20 @@ int main (void)
     return 1;
   }
   if (child == 0) {
-    printf("Hello from child\n");
-    return 0;
+    int ret = execlp("ffmpeg",
+                     "ffmpeg",
+                     //"-i", "-",
+                     //"-f", "rawvideo",
+                     NULL
+      );
+    if (ret < 0) {
+      fprintf(stderr, "ERROR: could not run ffmpeg as a child process: %s\n", strerror(errno));
+      return 1;
+    }
+    assert(0 && "unreachable");
   }
-  printf("Hello from parent. The childs pid is %d\n", child
-    );
-
+  //waiting for child being finished with execution
+  wait(NULL);
+  printf("Done rendering the video\n");
   return 0;
 }
