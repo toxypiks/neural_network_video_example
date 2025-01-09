@@ -16,6 +16,12 @@
 
 #define WIDTH 800
 #define HEIGHT 600
+#define FPS 60
+// hack that returns the value of the argument of macro as a string
+// STR(FPS) would return 60 now
+#define STR2(x) #x
+#define STR(x) STR2(x)
+
 uint32_t pixels[WIDTH*HEIGHT];
 
 int main (void)
@@ -47,7 +53,7 @@ int main (void)
                      "-f", "rawvideo",
                      "-pix_fmt", "rgba",
                      "-s", "800x600",
-                     "-r", "60",
+                     "-r", STR(FPS),
                      "-an",
                      "-i", "-",
                      "-c:v", "libx264",
@@ -65,9 +71,10 @@ int main (void)
 
   Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
   olivec_fill(oc, 0xFF181818);
-  olivec_circle(oc, WIDTH/2, HEIGHT/2, HEIGHT/4, 0xFF0000FF);
+  olivec_circle(oc, WIDTH/2, HEIGHT/2, HEIGHT/8, 0xFF0000FF);
 
-  for (size_t i = 0; i < 60; ++i) {
+  size_t duration = 2;
+  for (size_t i = 0; i < 60*duration; ++i) {
     write(pipefd[WRITE_END], pixels, sizeof(*pixels)*WIDTH*HEIGHT);
   }
   close(pipefd[WRITE_END]);
