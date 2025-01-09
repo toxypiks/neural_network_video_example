@@ -8,6 +8,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#define OLIVEC_IMPLEMENTATION
+#include "olive.c"
+
 #define READ_END 0
 #define WRITE_END 1
 
@@ -60,9 +63,9 @@ int main (void)
   }
   close(pipefd[READ_END]);
 
-  for (size_t i = 0; i < WIDTH*HEIGHT; ++i) {
-    pixels[i] = 0xFF0000FF;
-  }
+  Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
+  olivec_fill(oc, 0xFF181818);
+  olivec_circle(oc, WIDTH/2, HEIGHT/2, HEIGHT/4, 0xFF0000FF);
 
   for (size_t i = 0; i < 60; ++i) {
     write(pipefd[WRITE_END], pixels, sizeof(*pixels)*WIDTH*HEIGHT);
