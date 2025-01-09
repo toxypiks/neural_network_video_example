@@ -6,19 +6,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
-find_package(raylib)
 
-set(MAIN
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+set(SIMPLE_EXAMPLE_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/simple_example.c
   )
 
-add_executable(main)
-target_sources(main
- PRIVATE
-  ${MAIN}
-  )
-
-target_link_libraries(main
-  ${raylib_LIBRARIES}
-  m
+add_executable(simple_example)
+target_sources(simple_example
+  PRIVATE
+  ${SIMPLE_EXAMPLE_SRC}
   )

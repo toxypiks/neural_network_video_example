@@ -75,8 +75,8 @@ int main (void)
   float x = WIDTH/2;
   float y = HEIGHT/2;
   float r = HEIGHT/8;
-  float dx = 100;
-  float dy = 100;
+  float dx = 200;
+  float dy = 200;
   float dt = 1.0f/FPS;
 
   for (size_t i = 0; i < FPS*duration; ++i) {
