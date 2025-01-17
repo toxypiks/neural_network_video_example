@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <raylib.h>
+#include <math.h>
 
 typedef struct {
   float x;
@@ -11,7 +12,7 @@ typedef struct {
 
 void widget(Layout_Rect r, Color c)
 {
-  DrawRectangle(r.x, r.y, r.w, r.h, c);
+  DrawRectangle(ceilf(r.x), ceilf(r.y), ceilf(r.w), ceilf(r.h), c);
   printf("widget(%f, %, %f, %f)\n", r.x, r.y, r.w, r.h);
 }
 
@@ -70,9 +71,10 @@ int main(void)
 
   while(!WindowShouldClose()) {
 
+    size_t padding = 100;
     Layout root = {
     .orient = LO_HORZ,
-    .rect = {0, 0, GetRenderWidth(), GetRenderHeight()},
+    .rect = {0, padding, GetRenderWidth(), GetRenderHeight() - 2*padding},
     .i = 0,
     .count = 3,
     };
