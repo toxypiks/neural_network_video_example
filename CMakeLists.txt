@@ -32,3 +32,13 @@ target_link_libraries(img2nn
   ${raylib_LIBRARIES}
   m
   )
+
+set(LAYOUT_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/layout.c
+  )
+
+add_executable(layout)
+target_sources(layout
+  PRIVATE
+  ${LAYOUT_SRC}
+  )
