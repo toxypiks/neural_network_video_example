@@ -64,6 +64,7 @@ int main(void)
   size_t width = 16*factor;
   size_t height = 9*factor;
 
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(width, height, "test_layout");
   SetTargetFPS(60);
 
@@ -71,7 +72,7 @@ int main(void)
 
     Layout root = {
     .orient = LO_HORZ,
-    .rect = {0, 0, width, height},
+    .rect = {0, 0, GetRenderWidth(), GetRenderHeight()},
     .i = 0,
     .count = 3,
     };
