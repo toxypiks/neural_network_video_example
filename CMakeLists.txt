@@ -42,3 +42,8 @@ target_sources(layout
   PRIVATE
   ${LAYOUT_SRC}
   )
+
+target_link_libraries(layout
+  ${raylib_LIBRARIES}
+  m
+  )

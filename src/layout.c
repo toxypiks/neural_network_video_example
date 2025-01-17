@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
+#include <raylib.h>
 
 typedef struct {
   float x;
@@ -8,10 +9,10 @@ typedef struct {
   float h;
 } Layout_Rect;
 
-void widget(Layout_Rect r)
+void widget(Layout_Rect r, Color c)
 {
+  DrawRectangle(r.x, r.y, r.w, r.h, c);
   printf("widget(%f, %, %f, %f)\n", r.x, r.y, r.w, r.h);
-  (void) r;
 }
 
 // Orientation of Layout
@@ -55,18 +56,26 @@ Layout_Rect layout_slot(Layout *l, size_t i)
 
 int main(void)
 {
-  size_t width = 1920;
-  size_t height = 1080;
+  size_t factor = 80;
+  size_t width = 16*factor;
+  size_t height = 9*factor;
+
+  InitWindow(width, height, "test_layout");
+  SetTargetFPS(60);
 
   Layout root = {
-    .orient = LO_HORZ,
+    .orient = LO_VERT,
     .rect = {0, 0, width, height},
     .count = 3,
   };
 
-  widget(layout_slot(&root, 0));
-  widget(layout_slot(&root, 1));
-  widget(layout_slot(&root, 2));
-
+  while(!WindowShouldClose()) {
+    BeginDrawing();
+    ClearBackground(BLACK);
+    widget(layout_slot(&root, 0), BLUE);
+    widget(layout_slot(&root, 1), RED);
+    widget(layout_slot(&root, 2), GREEN);
+    EndDrawing();
+  }
   return 0;
 }
