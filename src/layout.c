@@ -70,7 +70,7 @@ int main(void)
   while(!WindowShouldClose()) {
 
     Layout root = {
-    .orient = LO_VERT,
+    .orient = LO_HORZ,
     .rect = {0, 0, width, height},
     .i = 0,
     .count = 3,
@@ -80,7 +80,15 @@ int main(void)
     ClearBackground(BLACK);
     widget(layout_slot(&root), RED);
     widget(layout_slot(&root), BLUE);
-    widget(layout_slot(&root), GREEN);
+    // nested widget
+    Layout panel = {
+      .orient = LO_VERT,
+      .rect = layout_slot(&root),
+      .count = 3,
+    };
+    widget(layout_slot(&panel), GREEN);
+    widget(layout_slot(&panel), YELLOW);
+    widget(layout_slot(&panel), PURPLE);
     EndDrawing();
   }
   return 0;
