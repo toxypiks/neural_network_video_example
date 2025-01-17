@@ -25,19 +25,20 @@ typedef enum {
 typedef struct {
   Layout_Orient orient;
   Layout_Rect rect;
+  size_t i;
   size_t count;
 } Layout;
 
-Layout_Rect layout_slot(Layout *l, size_t i)
+Layout_Rect layout_slot(Layout *l)
 {
-  assert(i < l->count);
+  assert(l->i < l->count);
 
   Layout_Rect r = {0};
   switch (l->orient) {
   case LO_HORZ:
     r.w = l->rect.w/l->count;
     r.h = l->rect.h;
-    r.x = l->rect.x + i*r.w;
+    r.x = l->rect.x + l->i*r.w;
     r.y = l->rect.y;
     break;
 
@@ -45,12 +46,15 @@ Layout_Rect layout_slot(Layout *l, size_t i)
     r.w = l->rect.w;
     r.h = l->rect.h/l->count;
     r.x = l->rect.x;
-    r.y = l->rect.y + i*r.h;
+    r.y = l->rect.y + l->i*r.h;
     break;
 
   default:
     assert(0 && "unreachable");
   }
+
+  l-> i += 1;
+
   return r;
 }
 
@@ -63,18 +67,20 @@ int main(void)
   InitWindow(width, height, "test_layout");
   SetTargetFPS(60);
 
-  Layout root = {
+  while(!WindowShouldClose()) {
+
+    Layout root = {
     .orient = LO_VERT,
     .rect = {0, 0, width, height},
+    .i = 0,
     .count = 3,
-  };
+    };
 
-  while(!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(BLACK);
-    widget(layout_slot(&root, 0), BLUE);
-    widget(layout_slot(&root, 1), RED);
-    widget(layout_slot(&root, 2), GREEN);
+    widget(layout_slot(&root), RED);
+    widget(layout_slot(&root), BLUE);
+    widget(layout_slot(&root), GREEN);
     EndDrawing();
   }
   return 0;
