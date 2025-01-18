@@ -144,10 +144,21 @@ int main(void)
     widget(layout_stack_slot(&ls), RED);
     widget(layout_stack_slot(&ls), BLUE);
 
-    // nested widget
+    // 3 nested vertical widgets in 3rd vertical widget
     layout_stack_push(&ls, LO_VERT, layout_stack_slot(&ls), 3);
+    // 2 nested horizontal widgets in first nested vertical widget of 3rd vertical widget
+    layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 2);
     widget(layout_stack_slot(&ls), GREEN);
+    widget(layout_stack_slot(&ls), PURPLE);
+    layout_stack_pop(&ls);
+
+    // 3 nested horizontal widgets in second widget of 3rd vertical widget
+    layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 3);
     widget(layout_stack_slot(&ls), YELLOW);
+    widget(layout_stack_slot(&ls), BLUE);
+    widget(layout_stack_slot(&ls), GREEN);
+    layout_stack_pop(&ls);
+
     widget(layout_stack_slot(&ls), PURPLE);
     layout_stack_pop(&ls);
     layout_stack_pop(&ls);
