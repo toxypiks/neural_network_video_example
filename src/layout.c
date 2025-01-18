@@ -13,8 +13,13 @@ typedef struct {
 
 void widget(Layout_Rect r, Color c)
 {
-  DrawRectangle(ceilf(r.x), ceilf(r.y), ceilf(r.w), ceilf(r.h), c);
-  printf("widget(%f, %, %f, %f)\n", r.x, r.y, r.w, r.h);
+  Rectangle rr = {
+    ceilf(r.x), ceilf(r.y), ceilf(r.w), ceilf(r.h)
+  };
+  if (CheckCollisionPointRec(GetMousePosition(), rr)) {
+    c = ColorBrightness(c, 0.75f);
+  }
+  DrawRectangleRec(rr, c);
 }
 
 // Orientation of Layout
@@ -155,8 +160,8 @@ int main(void)
     // 3 nested horizontal widgets in second widget of 3rd vertical widget
     layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 3);
     widget(layout_stack_slot(&ls), YELLOW);
-    widget(layout_stack_slot(&ls), BLUE);
-    widget(layout_stack_slot(&ls), GREEN);
+    widget(layout_stack_slot(&ls), YELLOW);
+    widget(layout_stack_slot(&ls), YELLOW);
     layout_stack_pop(&ls);
 
     widget(layout_stack_slot(&ls), PURPLE);
