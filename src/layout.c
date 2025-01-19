@@ -34,6 +34,8 @@ typedef struct {
   Layout_Rect rect;
   size_t count;
   size_t i;
+  float padding;
+  float gap;
 } Layout;
 
 Layout_Rect make_layout_rect(float x, float y, float w, float h)
@@ -46,14 +48,15 @@ Layout_Rect make_layout_rect(float x, float y, float w, float h)
   return r;
 }
 
-// function to make sure all fields of Layout are initialized exept i, should be called everytime a new layout gets created
-// when adding new field to Layout this function will fail telling you to initialize field
-Layout make_layout(Layout_Orient orient, Layout_Rect rect, size_t count)
+// function to make sure all fields of Layout are initialized except i, should be called everytime a new layout gets created
+// when adding new parameter to this function it will fail at other places telling you to initialize field
+Layout make_layout(Layout_Orient orient, Layout_Rect rect, size_t count, float gap)
 {
   Layout l = {0};
   l.orient = orient;
   l.rect = rect;
   l.count = count;
+  l.gap = gap;
 
   return l;
 }
@@ -69,6 +72,17 @@ Layout_Rect layout_slot(Layout *l)
     r.h = l->rect.h;
     r.x = l->rect.x + l->i*r.w;
     r.y = l->rect.y;
+
+    if(l->i == 0) { //First
+      r.w -= l->gap/2;
+    } else if (l->i >= l->count - 1) { //Last
+      r.x += l->gap/2;
+      r.w -= l->gap/2;
+    } else { //Middle
+      r.x += l->gap/2;
+      r.w -= l->gap;
+    }
+
     break;
 
   case LO_VERT:
@@ -76,6 +90,17 @@ Layout_Rect layout_slot(Layout *l)
     r.h = l->rect.h/l->count;
     r.x = l->rect.x;
     r.y = l->rect.y + l->i*r.h;
+
+    if(l->i == 0) { //First
+      r.h -= l->gap/2;
+    } else if (l->i >= l->count - 1) { //Last
+      r.y += l->gap/2;
+      r.h -= l->gap/2;
+    } else { //Middle
+      r.y += l->gap/2;
+      r.h -= l->gap;
+    }
+
     break;
 
   default:
@@ -106,9 +131,9 @@ typedef struct {
         (da)->items[(da)->count++] = (item);                                         \
     } while (0)
 
-void layout_stack_push(Layout_Stack *ls, Layout_Orient orient, Layout_Rect rect, size_t count)
+void layout_stack_push(Layout_Stack *ls, Layout_Orient orient, Layout_Rect rect, size_t count, float padding)
 {
-  Layout l = make_layout(orient, rect, count);
+  Layout l = make_layout(orient, rect, count, padding);
   da_append(ls, l);
 }
 
@@ -140,25 +165,26 @@ int main(void)
 
     float w = GetRenderWidth();
     float h = GetRenderHeight();
-    size_t padding = h*0.15;
+    size_t frame = h*0.15;
+    float gap = 10.0f;
 
     BeginDrawing();
     ClearBackground(BLACK);
 
-    layout_stack_push(&ls, LO_HORZ, make_layout_rect(0, padding, w, h - 2*padding), 3);
+    layout_stack_push(&ls, LO_HORZ, make_layout_rect(0, frame, w, h - 2*frame), 3, gap);
     widget(layout_stack_slot(&ls), RED);
     widget(layout_stack_slot(&ls), BLUE);
 
     // 3 nested vertical widgets in 3rd vertical widget
-    layout_stack_push(&ls, LO_VERT, layout_stack_slot(&ls), 3);
+    layout_stack_push(&ls, LO_VERT, layout_stack_slot(&ls), 3, gap);
     // 2 nested horizontal widgets in first nested vertical widget of 3rd vertical widget
-    layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 2);
+    layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 2, gap);
     widget(layout_stack_slot(&ls), GREEN);
     widget(layout_stack_slot(&ls), PURPLE);
     layout_stack_pop(&ls);
 
     // 3 nested horizontal widgets in second widget of 3rd vertical widget
-    layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 3);
+    layout_stack_push(&ls, LO_HORZ, layout_stack_slot(&ls), 3, gap);
     widget(layout_stack_slot(&ls), YELLOW);
     widget(layout_stack_slot(&ls), YELLOW);
     widget(layout_stack_slot(&ls), YELLOW);
