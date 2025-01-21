@@ -20,7 +20,7 @@ int main (void)
   while(!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(BLACK);
-    gym_render_nn(nn, 0, 0, w, h);
+    gym_render_nn(nn, CLITERAL(Gym_Rect){0, 0, w, h});
     EndDrawing();
   }
   return 0;

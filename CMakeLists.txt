@@ -18,21 +18,6 @@ target_sources(simple_example
   ${SIMPLE_EXAMPLE_SRC}
   )
 
-set(LAYOUT_SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/layout.c
-  )
-
-add_executable(layout)
-target_sources(layout
-  PRIVATE
-  ${LAYOUT_SRC}
-  )
-
-target_link_libraries(layout
-  ${raylib_LIBRARIES}
-  m
-  )
-
 set(SIMPLE_EXAMPLE_UI_SRC
   ${CMAKE_CURRENT_SOURCE_DIR}/src/simple_example_ui.c
   )
