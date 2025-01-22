@@ -19,9 +19,18 @@ void gym_render_weights(Gym_Rect r, Mat m)
       float alpha = sigmoidf(MAT_AT(m, y, x));
       high_color.a = floorf(255.f*alpha);
       Color color = ColorAlphaBlend(low_color, high_color, WHITE);
-      DrawRectangle(r.x + x*cell_width, r.y + y*cell_height, cell_width, cell_height, color);
+      DrawRectangle(ceilf(r.x + x*cell_width), ceilf(r.y + y*cell_height), ceilf(cell_width), ceilf(cell_height), color);
     }
   }
+}
+
+void gym_render_nn_as_cake(Gym_Rect r, NN nn)
+{
+  gym_layout_begin(GLO_VERT, r, nn.count, 10);
+  for (size_t i = 0; i < nn.count; ++i) {
+    gym_render_weights(gym_layout_slot(), nn.ws[i]);
+  }
+  gym_layout_end();
 }
 
 int main (void)
@@ -41,7 +50,7 @@ int main (void)
     Gym_Rect r = {0, 0, w, h};
     gym_layout_begin(GLO_HORZ, r, 2, 0);
     gym_render_nn(nn, gym_layout_slot());
-    gym_render_weights(gym_layout_slot(), nn.ws[0]);
+    gym_render_nn_as_cake(gym_layout_slot(), nn);
     gym_layout_end();
     EndDrawing();
   }
