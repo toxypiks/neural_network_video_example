@@ -6,6 +6,13 @@
 
 #include <raylib.h>
 
+void gym_render_weights(Gym_Rect r, Mat m)
+{
+  (void) r;
+  (void) m;
+  DrawRectangle(r.x, r.y, r.w, r.h, BLUE);
+}
+
 int main (void)
 {
   size_t arch[] = {2, 3, 4, 2};
@@ -20,7 +27,11 @@ int main (void)
   while(!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(BLACK);
-    gym_render_nn(nn, CLITERAL(Gym_Rect){0, 0, w, h});
+    Gym_Rect r = {0, 0, w, h};
+    gym_layout_begin(GLO_HORZ, r, 2, 0);
+    gym_render_nn(nn, gym_layout_slot());
+    gym_render_weights(gym_layout_slot(), nn.ws[0]);
+    gym_layout_end();
     EndDrawing();
   }
   return 0;
