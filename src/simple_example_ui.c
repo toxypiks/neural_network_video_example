@@ -8,9 +8,20 @@
 
 void gym_render_weights(Gym_Rect r, Mat m)
 {
-  (void) r;
-  (void) m;
-  DrawRectangle(r.x, r.y, r.w, r.h, BLUE);
+  Color low_color = {0xFF, 0x00, 0xFF, 0xFF};
+  Color high_color = {0x00, 0xFF, 0x00, 0xFF};
+
+  float cell_width = r.w/m.cols;
+  float cell_height = r.h/m.rows;
+
+  for (size_t y = 0; y < m.rows; ++y) {
+    for (size_t x = 0; x < m.cols; ++x) {
+      float alpha = sigmoidf(MAT_AT(m, y, x));
+      high_color.a = floorf(255.f*alpha);
+      Color color = ColorAlphaBlend(low_color, high_color, WHITE);
+      DrawRectangle(r.x + x*cell_width, r.y + y*cell_height, cell_width, cell_height, color);
+    }
+  }
 }
 
 int main (void)
