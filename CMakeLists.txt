@@ -32,3 +32,18 @@ target_link_libraries(simple_example_ui
   ${raylib_LIBRARIES}
   m
   )
+
+set(XOR_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/xor.c
+  )
+
+add_executable(xor)
+target_sources(xor
+  PRIVATE
+  ${XOR_SRC}
+  )
+
+target_link_libraries(xor
+  ${raylib_LIBRARIES}
+  m
+  )

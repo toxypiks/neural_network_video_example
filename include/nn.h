@@ -165,6 +165,8 @@ static Gym_Layout_Stack default_gym_layout_stack = {0};
     } while (0)
 
 void gym_render_nn(NN nn, Gym_Rect r);
+void gym_render_mat_as_cake(Mat m, Gym_Rect r);
+void gym_render_nn_as_cake(NN nn, Gym_Rect r);
 void gym_plot(Gym_Plot plot, Gym_Rect r);
 void gym_slider(float *value, bool *dragging, float rx, float ry, float rw, float rh);
 void gym_nn_image_grayscale(NN nn, void *pixels, size_t width, size_t height, size_t stride, float low, float high);
@@ -649,6 +651,33 @@ void gym_render_nn(NN nn, Gym_Rect r)
             }
         }
     }
+}
+
+void gym_render_mat_as_cake(Mat m, Gym_Rect r)
+{
+  Color low_color = {0xFF, 0x00, 0xFF, 0xFF};
+  Color high_color = {0x00, 0xFF, 0x00, 0xFF};
+
+  float cell_width = r.w/m.cols;
+  float cell_height = r.h/m.rows;
+
+  for (size_t y = 0; y < m.rows; ++y) {
+    for (size_t x = 0; x < m.cols; ++x) {
+      float alpha = sigmoidf(MAT_AT(m, y, x));
+      high_color.a = floorf(255.f*alpha);
+      Color color = ColorAlphaBlend(low_color, high_color, WHITE);
+      DrawRectangle(ceilf(r.x + x*cell_width), ceilf(r.y + y*cell_height), ceilf(cell_width), ceilf(cell_height), color);
+    }
+  }
+}
+
+void gym_render_nn_as_cake(NN nn, Gym_Rect r)
+{
+  gym_layout_begin(GLO_VERT, r, nn.count, 10);
+  for (size_t i = 0; i < nn.count; ++i) {
+    gym_render_mat_as_cake(nn.ws[i], gym_layout_slot());
+  }
+  gym_layout_end();
 }
 
 void gym_plot(Gym_Plot plot, Gym_Rect r)
