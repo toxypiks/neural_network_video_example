@@ -8,31 +8,6 @@ include_directories(include)
 
 find_package(raylib)
 
-set(SIMPLE_EXAMPLE_SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/simple_example.c
-  )
-
-add_executable(simple_example)
-target_sources(simple_example
-  PRIVATE
-  ${SIMPLE_EXAMPLE_SRC}
-  )
-
-set(SIMPLE_EXAMPLE_UI_SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/simple_example_ui.c
-  )
-
-add_executable(simple_example_ui)
-target_sources(simple_example_ui
-  PRIVATE
-  ${SIMPLE_EXAMPLE_UI_SRC}
-  )
-
-target_link_libraries(simple_example_ui
-  ${raylib_LIBRARIES}
-  m
-  )
-
 set(XOR_SRC
   ${CMAKE_CURRENT_SOURCE_DIR}/src/xor.c
   )
@@ -44,6 +19,36 @@ target_sources(xor
   )
 
 target_link_libraries(xor
+  ${raylib_LIBRARIES}
+  m
+  )
+
+set(ADDER_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/adder.c
+  )
+
+add_executable(adder)
+target_sources(adder
+  PRIVATE
+  ${ADDER_SRC}
+  )
+
+target_link_libraries(adder
+  ${raylib_LIBRARIES}
+  m
+  )
+
+set(LAYOUT_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/layout.c
+  )
+
+add_executable(layout)
+target_sources(layout
+  PRIVATE
+  ${LAYOUT_SRC}
+  )
+
+target_link_libraries(layout
   ${raylib_LIBRARIES}
   m
   )

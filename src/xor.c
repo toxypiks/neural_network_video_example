@@ -1,5 +1,7 @@
+#define GYM_IMPLEMENTATION
+#include "gym.h"
+
 #define NN_IMPLEMENTATION
-#define NN_ENABLE_GYM
 #include "nn.h"
 
 size_t arch[] = {2, 2, 1};
@@ -99,12 +101,9 @@ int main(void)
             r.x = 0;
             r.y = h/2 - r.h/2;
 
-            gym_layout_begin(GLO_HORZ, r, 3, 0);
+            gym_layout_begin(GLO_HORZ, r, 3, 10);
                 gym_plot(plot, gym_layout_slot());
-                gym_layout_begin(GLO_VERT, gym_layout_slot(), 2, 0);
-                    gym_render_nn(nn, gym_layout_slot());
-                    gym_render_nn_as_cake(nn, gym_layout_slot());
-                gym_layout_end();
+                gym_render_nn(nn, gym_layout_slot());
                 verify_nn_gate(font, nn, gym_layout_slot());
             gym_layout_end();
 
